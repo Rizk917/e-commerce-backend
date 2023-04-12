@@ -19,6 +19,12 @@ const userSchema = mongoose.Schema(
             required:[true,'plz add a password']
 
         },
+        role:{
+            type:String,
+            required:[true,'plz add a role']
+
+        }
+
 
 
     },

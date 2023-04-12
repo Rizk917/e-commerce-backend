@@ -7,9 +7,9 @@ import user from "../models/user.model.js";
 
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, password } = req.body
+    const { name, email, password,role } = req.body
 
-    if(!name || !email || !password)
+    if(!name || !email || !password||!role)
     {
         res.status(400)
         throw new Error('Please add all fields')
@@ -28,6 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const newUser = await user.create ({
         name,
         email,
+        role,
         password:hashedPassword
     })
 
@@ -36,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
             _id:newUser.id,
             name: newUser.name,
             email: newUser.email,
+            role:newUser.role,
             token: generateToken(user._id)
         })
     }else {
@@ -67,6 +69,7 @@ const loginUser = asyncHandler (async(req, res) => {
             _id:loginUser.id,
             name: loginUser.name,
             email: loginUser.email,
+            role:loginUser.role,
             token: generateToken(user._id)
 
         })

@@ -26,11 +26,9 @@ app.use(bodyParser.urlencoded({
 app.get("/", (req, res) => {
   res.send("hello world");
 });
-
-app.use("/programs", programRoute);
-app.use("/gallery", galleryRoute);
+app.use("/products", productRoute);
+app.use("/categories", categoryRoute);
 app.use("/register", registerRoute);
-app.use("/partners", partnersRoute);
 app.use("/user", userRoute);
 
 
