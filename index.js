@@ -28,7 +28,6 @@ app.get("/", (req, res) => {
 });
 app.use("/products", productRoute);
 app.use("/categories", categoryRoute);
-app.use("/register", registerRoute);
 app.use("/user", userRoute);
 
 
