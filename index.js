@@ -1,10 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import db from "./config/db.js";
-import programRoute from "./routes/program.route.js";
-import galleryRoute from "./routes/gallery.route.js";
-import registerRoute from "./routes/register.route.js";
-import partnersRoute from "./routes/partners.route.js";
+import productRoute from "./routes/products.routes.js";
+import categoryRoute from "./routes/categories.routes.js";
 import userRoute from "./routes/user.route.js";
 import bodyParser from "body-parser";
 
