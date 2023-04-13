@@ -26,7 +26,7 @@ const createProduct = async (req, res) =>{
         productPrice,
         category
     });
-
+    console.log(req)
 
     try{
                 const savedProduct = await product.save();
@@ -37,6 +37,7 @@ const createProduct = async (req, res) =>{
                 })
             }
     catch (error){
+      
                 res.json({
                     message:"Product created failed",
                     status:203,
