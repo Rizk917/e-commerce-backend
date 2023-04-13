@@ -1,14 +1,16 @@
 import Order from '../models/order.model.js';
 import asyncHandler from 'express-async-handler';
+import Cart from '../models/cartModel.js';
 
 //@dec     Get Orders
 //@rout    Get /order
 //@access  private
 const getAllOrder = asyncHandler(async (req, res) => {
   //
-  const order = await Order.find();
+  const order = await Cart.find();
 
   res.status(200).json(order);
+  
 });
 
 //@dec     get one Order
