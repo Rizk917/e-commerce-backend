@@ -5,6 +5,7 @@ import asyncHandler from 'express-async-handler';
 //@rout    Get /order
 //@access  private
 const getAllOrder = asyncHandler(async (req, res) => {
+  //
   const order = await Order.find();
 
   res.status(200).json(order);
