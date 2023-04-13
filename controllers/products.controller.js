@@ -15,7 +15,7 @@ const getAll = async (req, res) =>{
 
 const createProduct = async (req, res) =>{
         
-    const {productName, productImage, productDescription, productPrice, category } = req.body;
+    const {productName, productImage, productDescription, productPrice,quantity, category } = req.body;
 
     
 
@@ -24,9 +24,10 @@ const createProduct = async (req, res) =>{
         productImage,
         productDescription,
         productPrice,
+        quantity,
         category
     });
-    console.log(req)
+    console.log(product)
 
     try{
                 const savedProduct = await product.save();
