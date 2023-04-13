@@ -6,7 +6,8 @@ import categoryRoute from './routes/categories.routes.js';
 import userRoute from './routes/user.route.js';
 import orderRouter from './routes/order.routes.js';
 import bodyParser from 'body-parser';
-import errorHandler from './middleware/error.middleware.js';
+import errorHandler from './middleware/error.middleware.js';import cartRoutes from "./routes/cartRoutes.js"
+
 
 dotenv.config();
 
@@ -32,6 +33,10 @@ app.use('/categories', categoryRoute);
 app.use('/user', userRoute);
 app.use('/order', orderRouter);
 /*******************/
+
+
+
+
 
 app.use(errorHandler);
 
