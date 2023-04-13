@@ -5,6 +5,7 @@ import productRoute from "./routes/products.routes.js";
 import categoryRoute from "./routes/categories.routes.js";
 import userRoute from "./routes/user.route.js";
 import bodyParser from "body-parser";
+import cartRoutes from "./routes/cartRoutes.js"
 
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/categories", categoryRoute);
 app.use("/user", userRoute);
 
 
+app.use("/", cartRoutes)
 
 
 
