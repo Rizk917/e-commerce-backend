@@ -1,5 +1,6 @@
 import Cart from "../models/cartModel.js";
 import Product from "../models/products.model.js";
+import User from "../models/user.model.js"
 
 
 export const AllCarts = async(req, res) =>{
@@ -21,27 +22,27 @@ export const AllCarts = async(req, res) =>{
 
 
 export const addToCart = async (req, res) => {
+  console.log(req.body);
   try {
-    const { productId, quantity } = req.body;
+    const { productId, productName, quantity } = req.body;
     const userId = req.body.userId;
 
-    const cartProducts = Array.isArray(req.body.products) ? req.body.products : [{ productId, quantity }];
+    const cartProducts = Array.isArray(req.body.products) ? req.body.products : [{ productId, productName, quantity }];
 
     let cart = await Cart.findOne({ user_id: userId });
 
-    // Check if cart already exists, if not, create a new one
     if (!cart) {
       cart = new Cart({
         user_id: userId,
         products: [],
-        total_price: 0
+        total_price: 0,
       });
     }
 
     let totalPrice = cart.total_price;
 
     for (const cartProduct of cartProducts) {
-      const { productId, quantity } = cartProduct;
+      const { productId, productName, quantity } = cartProduct;
 
       const product = await Product.findById(productId);
 
@@ -56,24 +57,23 @@ export const addToCart = async (req, res) => {
       const price = product.productPrice;
       const total_price = price * quantity;
 
-      const index = cart.products.findIndex((item) => item.product.toString() === productId);
-      if (index === -1) {
-        // Add new product to cart
+      const existingProduct = cart.products.find((item) => item.product.toString() === productId);
+      if (!existingProduct) {
         product.productQuantity -= quantity;
         await product.save();
-        cart.products.push({ product: productId, quantity, price, total_price });
-        totalPrice += total_price;
+        cart.products.push({ product: productId, productName, quantity, price, total_price });
       } else {
-        const availableQuantity = product.productQuantity + cart.products[index].quantity;
+        const availableQuantity = product.productQuantity + existingProduct.quantity;
         if (quantity > availableQuantity) {
           return res.status(400).json({ success: false, message: "Not enough quantity available" });
         }
-        cart.products[index].quantity += quantity;
-        cart.products[index].total_price += total_price;
+        existingProduct.quantity += quantity;
+        existingProduct.total_price += total_price;
         product.productQuantity -= quantity;
         await product.save();
-        totalPrice += total_price;
       }
+
+      totalPrice += total_price;
     }
 
     cart.total_price = totalPrice;
@@ -87,7 +87,7 @@ export const addToCart = async (req, res) => {
 };
 
   
-  
+
   
 
   
@@ -140,3 +140,16 @@ export const removeFromCart = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+
+// const order = async (req, res) =>{
+// const {cartId} = req.body 
+// const cart = await Cart.findById({cartId})
+//   const {userId, productId} = cart;
+//   const user = await User.findById({userId})
+//   const{name} = user;
+//   const p = await Product.findById({productId});
+//   const productname =  p.productName
+
+
+// }
