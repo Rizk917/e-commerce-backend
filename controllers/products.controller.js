@@ -12,7 +12,7 @@ cloudinary.config({
 
 
 const getAll = async (req, res) =>{
-    const allProduct = await Product.find().populate('category');
+    const allProduct = await Product.find().populate('categoryId');
     res.json({
         message:"All product",
         status:200,
@@ -22,7 +22,7 @@ const getAll = async (req, res) =>{
 
 
 const createProduct = async (req, res) => {
-    const { productName, productDescription, productPrice, quantity, category } = req.body;
+    const { productName, productDescription, productPrice, productQuantity, categoryId } = req.body;
     try {
       let productImage = req.file.path; // get the path of the image from multer
       const uploadedImage = await cloudinary.uploader.upload(productImage); // upload the image to cloudinary
@@ -31,8 +31,8 @@ const createProduct = async (req, res) => {
         productImage: uploadedImage.secure_url, // use the secure_url property of the uploaded image
         productDescription,
         productPrice,
-        quantity,
-        category,
+        productQuantity,
+        categoryId,
       });
       const savedProduct = await product.save();
       res.status(201).json({

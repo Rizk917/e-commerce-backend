@@ -22,11 +22,11 @@ const productSchema = mongoose.Schema(
             type:Number,
             // required:true
         },
-        quantity:{
+        productQuantity:{
             type:Number,
             // required:true
         },
-        category: 
+        categoryId: 
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
