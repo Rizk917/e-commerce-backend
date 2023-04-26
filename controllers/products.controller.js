@@ -51,23 +51,41 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const productId = req.params.id;
-  try {
-    if (!req.body.productName) {
-      throw new Error("Product updated failed");
-    }
-    const updatedProduct = await Product.findByIdAndUpdate(productId, req.body);
+    console.log(req.body)
+    console.log(req.params.id)
+    const productId = req.params.id;
+    const { productName,productDescription,productPrice,productQuantity,categoryId } = req.body;
+    try {
+        let productImage;
+        if (req.file) {
+    productImage = req.file.path; // get the path of the image from multer
+    const uploadedImage = await cloudinary.uploader.upload(productImage); // upload the image to cloudinary
+    productImage = uploadedImage.secure_url; // use the secure_url property of the uploaded image
+}
+        
+        const editProduct = ({
+        productName,
+        productImage, // use the secure_url property of the uploaded image
+        productDescription,
+        productPrice,
+        productQuantity,
+        categoryId,
+        });
+
+
+    const updatedProduct = await Product.findByIdAndUpdate(productId,editProduct );
     res.json({
-      message: "Product updated successfully",
-      status: 200,
-      data: updatedProduct,
+    message: "Product updated successfully",
+    status: 200,
+    data: editProduct,
     });
-  } catch (error) {
+} catch (error) {
+    console.log(error)
     res.json({
-      message: "Product updated failed",
-      status: 203,
+    message: "Product updated failed",
+    status: 203,
     });
-  }
+}
 };
 
 const deleteProduct = async (req, res) => {
