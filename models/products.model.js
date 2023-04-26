@@ -6,12 +6,12 @@ const productSchema = mongoose.Schema(
         
         productName:{
             type:String,
-            required:true,
+            // required:true,
         },
 
         productImage: {
             type:String,
-            required:true,
+            // required:true,
         },
 
         productDescription:{
@@ -19,18 +19,18 @@ const productSchema = mongoose.Schema(
         },
 
         productPrice:{
-            type:String,
-            required:true
+            type:Number,
+            // required:true
         },
         quantity:{
             type:Number,
-            required:true
+            // required:true
         },
         category: 
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
-            required:true
+            // required:true
         }
         
         

@@ -85,7 +85,6 @@ export const addToCart = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-
   
 
   
@@ -140,16 +139,13 @@ export const removeFromCart = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+export const deleteAllCarts = async (req, res) => {
+  try {
+    await Cart.deleteMany({});
+    res.status(200).json({ success: true, message: "All carts deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
-
-// const order = async (req, res) =>{
-// const {cartId} = req.body 
-// const cart = await Cart.findById({cartId})
-//   const {userId, productId} = cart;
-//   const user = await User.findById({userId})
-//   const{name} = user;
-//   const p = await Product.findById({productId});
-//   const productname =  p.productName
-
-
-// }

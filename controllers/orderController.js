@@ -6,7 +6,7 @@ export const creatAnOrder = async (req, res) => {
   try {
     console.log(req.body)
 
-    const userId = "6437c07bd944ba122a2804a4";
+    const userId = req.body.userId;
 
     const cart = await Cart.find({ user_id: userId }).exec();
 
