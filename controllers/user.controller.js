@@ -81,16 +81,51 @@ const loginUser = asyncHandler (async(req, res) => {
 })
 
 
-
 const getMe = asyncHandler(async (req, res) => {
-    res.json({message: 'User data display' })
-})
-
+    const currentUser = await user.findById(req.user.id);
+  
+    res.json({
+      message: "User data retrieved successfully",
+      status: 200,
+      data: currentUser,
+    });
+  });
+  
+  const getUserById = asyncHandler(async (req, res) => {
+    const User = await user.findById(req.params.id);
+  
+    if (User) {
+      res.json({
+        message: 'User data retrieved',
+        User,
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  });
 
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET , {
         expiresIn: '30d',
     })
 }
+const deleteUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+  
+    const deletedUser = await user.findByIdAndDelete(id);
+  
+    if (deletedUser) {
+      res.json({
+        message: "User deleted successfully",
+        status: 200,
+        data: deletedUser,
+      });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  });
+  
 
-export default {registerUser, loginUser, getMe, getUsers}
+export default {registerUser, loginUser, getUserById,getMe,deleteUser, getUsers}

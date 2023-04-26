@@ -4,10 +4,18 @@ import db from './config/db.js';
 import productRoute from './routes/products.routes.js';
 import categoryRoute from './routes/categories.routes.js';
 import userRoute from './routes/user.route.js';
-import orderRouter from './routes/order.routes.js';
 import bodyParser from 'body-parser';
 import errorHandler from './middleware/error.middleware.js';
-import cartRoutes from './routes/cartRoutes.js';
+import cartRoutes from "./routes/cartRoutes.js"
+import orderRoutes from './routes/orderRoutes.js'
+
+import cors from "cors";
+
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 
 dotenv.config();
 
@@ -16,6 +24,7 @@ const port = process.env.PORT || 5000;
 await db();
 
 const app = new express();
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(
@@ -31,9 +40,11 @@ app.get('/', (req, res) => {
 app.use('/products', productRoute);
 app.use('/categories', categoryRoute);
 app.use('/user', userRoute);
-app.use('/order', orderRouter);
-app.use('/cart', cartRoutes);
-/*******************/
+app.use('/order', orderRoutes);
+app.use('/cart', cartRoutes)
+
+
+
 
 app.use(errorHandler);
 

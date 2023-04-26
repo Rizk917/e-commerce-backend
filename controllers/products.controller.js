@@ -1,10 +1,18 @@
 import Product from "../models/products.model.js";
+import { v2 as cloudinary } from 'cloudinary'
 
+
+// Configuration 
+cloudinary.config({
+  cloud_name: "didb7l6nz",
+  api_key: "721724432988673",
+  api_secret: "xhRyWzzuWWbgblhPRZ8cVk_Ss7Q"
+});
 
 
 
 const getAll = async (req, res) =>{
-    const allProduct = await Product.find();
+    const allProduct = await Product.find().populate('category');
     res.json({
         message:"All product",
         status:200,
@@ -13,39 +21,32 @@ const getAll = async (req, res) =>{
 }
 
 
-const createProduct = async (req, res) =>{
-        
-    const {productName, productImage, productDescription, productPrice,quantity, category } = req.body;
-
-    
-
-    const product = new Product ({
+const createProduct = async (req, res) => {
+    const { productName, productDescription, productPrice, quantity, category } = req.body;
+    try {
+      let productImage = req.file.path; // get the path of the image from multer
+      const uploadedImage = await cloudinary.uploader.upload(productImage); // upload the image to cloudinary
+      const product = new Product({
         productName,
-        productImage,
+        productImage: uploadedImage.secure_url, // use the secure_url property of the uploaded image
         productDescription,
         productPrice,
         quantity,
-        category
-    });
-    console.log(product)
-
-    try{
-                const savedProduct = await product.save();
-                res.json({
-                    message:"Product created successfully",
-                    status:201,
-                    data:savedProduct,
-                })
-            }
-    catch (error){
-      
-                res.json({
-                    message:"Product created failed",
-                    status:203,
-                                }) 
-            }
-}
-
+        category,
+      });
+      const savedProduct = await product.save();
+      res.status(201).json({
+        message: "Product created successfully",
+        data: savedProduct,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "Product creation failed",
+        error,
+      });
+    }
+  };
 
 const updateProduct = async (req, res) => {
     const productId = req.params.id;
