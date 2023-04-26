@@ -9,6 +9,13 @@ import errorHandler from './middleware/error.middleware.js';
 import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from './routes/orderRoutes.js'
 
+import cors from "cors";
+
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 
 dotenv.config();
 
@@ -17,6 +24,7 @@ const port = process.env.PORT || 5000;
 await db();
 
 const app = new express();
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(

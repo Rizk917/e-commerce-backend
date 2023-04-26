@@ -31,7 +31,7 @@ const createProduct = async (req, res) => {
         productImage: uploadedImage.secure_url, // use the secure_url property of the uploaded image
         productDescription,
         productPrice,
-        quantity,
+        productQuantity,
         category,
       });
       const savedProduct = await product.save();
