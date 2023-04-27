@@ -98,11 +98,11 @@ const deleteProduct = async (req, res) => {
   });
 };
 
-// display all products with the categories fro each product
+// display all products with the categories for each product
 
 const displayProductWithCategories = async (req, res) => {
   try {
-    const products = await Product.find().populate("category");
+    const products = await Product.find().populate("categoryId");
     res.json({
       products,
     });
@@ -119,7 +119,7 @@ const displayProductWithCategories = async (req, res) => {
 const displayProduct = async (req, res) => {
   const categoryId = req.params.id;
   try {
-    const products = await Product.find({ category: categoryId });
+    const products = await Product.find({ categoryId: categoryId });
     res.json({
       products,
     });
