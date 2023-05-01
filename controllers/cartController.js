@@ -149,3 +149,22 @@ export const deleteAllCarts = async (req, res) => {
   }
 };
 
+export const Acart = async(req, res) =>{
+  console.log(req)
+  // const  id = "6437c07bd944ba122a2804a4" 
+  const id = req.params.id
+try{
+    const cart = await Cart.find({user_id: id});
+    if(!cart){
+      return res.status(404).json({message:"no items in the cart"})
+
+    }else{
+      return res.status(200).json(cart)
+    }
+  }catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+}
+}
+
+
