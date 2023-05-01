@@ -13,16 +13,22 @@ export const creatAnOrder = async (req, res) => {
     if (!cart) {
       return res.status(400).json("Cart not found");
     }
-
+    let totalBill = 0;
+for(let i = 0; i<cart[0].products.length; i++){
+  totalBill += cart[0].products[i].total_price;
+}
     const order = new Order({
       user: userId,
       shippingAddress: req.body.shippingAddress,
       phoneNumber: req.body.phoneNumber,
       cartItems: cart[0]._id,
       products: cart[0].products,
+      totalBill: totalBill,
+      
     });
-
+console.log(order)
     await order.save();
+Cart.deleteOne({ user_id: userId }).exec();
 
     return res.status(200).json(order);
   } catch (error) {
@@ -96,4 +102,15 @@ try{
         catch (error) {
             console.error(error);
             return res.status(500).json("Server error");
-          }}
+          }};
+
+          export  const cancelOrder = async (req, res) =>{
+            const id = req.params.id
+         try {const cart = await Cart.findOneAndDelete({ user: id})
+         if(cart){
+           return res.status(200).json("cart is deleted")
+         }
+          
+         } catch (error) {console.log(error)
+          
+         }}

@@ -87,7 +87,7 @@ export const addToCart = async (req, res) => {
 };
 
 export const Acart = async(req, res) =>{
-  console.log(req)
+  console.log(req.params.id)
   // const  id = "6437c07bd944ba122a2804a4" 
   const id = req.params.id
 try{
