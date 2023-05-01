@@ -5,7 +5,6 @@ import productRoute from './routes/products.routes.js';
 import categoryRoute from './routes/categories.routes.js';
 import userRoute from './routes/user.route.js';
 import aboutRoute from "./routes/aboutRoute.js";
-import aboutRoute from "./routes/aboutRoute.js";
 import bodyParser from 'body-parser';
 import errorHandler from './middleware/error.middleware.js';
 import cartRoutes from "./routes/cartRoutes.js"
