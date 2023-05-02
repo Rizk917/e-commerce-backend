@@ -8,6 +8,7 @@ import aboutRoute from "./routes/aboutRoute.js";
 import bodyParser from 'body-parser';
 import errorHandler from './middleware/error.middleware.js';
 import cartRoutes from "./routes/cartRoutes.js"
+import popularRoutes from "./routes/popularProductRoute.js"
 import orderRoutes from './routes/orderRoutes.js'
 import imageCarouselRoute from "./routes/imageCarousel.route.js";
 import cors from "cors";
@@ -46,6 +47,7 @@ app.use('/order', orderRoutes);
 app.use('/cart', cartRoutes)
 app.use("/imageCarousel", imageCarouselRoute);
 app.use("/about",aboutRoute)
+app.use("/popular",popularRoutes)
 
 
 
