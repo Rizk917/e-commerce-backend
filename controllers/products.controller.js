@@ -17,6 +17,14 @@ const getAll = async (req, res) => {
   });
 };
 
+const getProductById = async (req, res) => {
+  const productId = req.params.id;
+  const product = await Product.findById(productId)
+  res.json({
+    data:product
+  })
+}
+
 const createProduct = async (req, res) => {
   const {
     productName,
@@ -139,4 +147,5 @@ export default {
   deleteProduct,
   displayProduct,
   displayProductWithCategories,
+  getProductById
 };

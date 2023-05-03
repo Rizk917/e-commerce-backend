@@ -11,7 +11,7 @@ router.route('/:id').delete(productController.deleteProduct)
 router.route('/:id').put(upload.single('productImage'),productController.updateProduct)
 router.route('/display').get(productController.displayProductWithCategories)
 router.route('/display/:id').get(productController.displayProduct)
-
+router.route('/:id').get(productController.getProductById)
 
 
 
