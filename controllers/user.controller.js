@@ -9,7 +9,7 @@ import user from "../models/user.model.js";
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password,role } = req.body
 
-    if(!name || !email || !password||!role)
+    if(!name || !email || !password)
     {
         res.status(400)
         throw new Error('Please add all fields')
@@ -28,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const newUser = await user.create ({
         name,
         email,
-        role,
+        role: role || 'user',
         password:hashedPassword
     })
 
@@ -126,6 +126,38 @@ const deleteUser = asyncHandler(async (req, res) => {
       throw new Error("User not found");
     }
   });
+  const editUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { name, email, password, role } = req.body;
   
+    const userToUpdate = await user.findById(id);
+  
+    if (!userToUpdate) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  
+    userToUpdate.name = name || userToUpdate.name;
+    userToUpdate.email = email || userToUpdate.email;
+    // userToUpdate.role = role || userToUpdate.role;
+  
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      userToUpdate.password = await bcrypt.hash(password, salt);
+    }
+  
+    const updatedUser = await userToUpdate.save();
+  
+    res.json({
+      message: "User updated successfully",
+      status: 200,
+      data: {
+        _id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: 'user',
+      },
+    });
+  });
 
-export default {registerUser, loginUser, getUserById,getMe,deleteUser, getUsers}
+export default {registerUser, loginUser, getUserById,getMe,deleteUser,editUser, getUsers}
