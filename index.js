@@ -4,11 +4,13 @@ import db from './config/db.js';
 import productRoute from './routes/products.routes.js';
 import categoryRoute from './routes/categories.routes.js';
 import userRoute from './routes/user.route.js';
+import aboutRoute from "./routes/aboutRoute.js";
 import bodyParser from 'body-parser';
 import errorHandler from './middleware/error.middleware.js';
 import cartRoutes from "./routes/cartRoutes.js"
+import popularRoutes from "./routes/popularProductRoute.js"
 import orderRoutes from './routes/orderRoutes.js'
-
+import imageCarouselRoute from "./routes/imageCarousel.route.js";
 import cors from "cors";
 
 const corsOptions = {
@@ -40,9 +42,12 @@ app.get('/', (req, res) => {
 app.use('/products', productRoute);
 app.use('/categories', categoryRoute);
 app.use('/user', userRoute);
+app.use("/about",aboutRoute)
 app.use('/order', orderRoutes);
 app.use('/cart', cartRoutes)
-
+app.use("/imageCarousel", imageCarouselRoute);
+app.use("/about",aboutRoute)
+app.use("/popular",popularRoutes)
 
 
 
