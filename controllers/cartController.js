@@ -49,18 +49,8 @@ export const addToCart = async (req, res) => {
           .json({ success: false, message: 'Product not found' });
       }
 
-      if (product.productQuantity < quantity) {
-        return res
-          .status(400)
-          .json({ success: false, message: 'Not enough quantity available' });
-      }
-
-      const price = product.productPrice;
-      const total_price = price * quantity;
-
-      const existingProduct = cart.products.find(
-        (item) => item.product.toString() === productId
-      );
+      // Don't affect the quantity of the item in the stock
+      const existingProduct = cart.products.find((item) => item.product.toString() === productId);
       if (!existingProduct) {
         product.productQuantity -= quantity;
         await product.save();
@@ -71,21 +61,13 @@ export const addToCart = async (req, res) => {
           price,
           total_price,
         });
+        cart.products.push({ product: productId, productName, quantity, price: product.productPrice, total_price: product.productPrice * quantity });
       } else {
-        const availableQuantity =
-          product.productQuantity + existingProduct.quantity;
-        if (quantity > availableQuantity) {
-          return res
-            .status(400)
-            .json({ success: false, message: 'Not enough quantity available' });
-        }
         existingProduct.quantity += quantity;
-        existingProduct.total_price += total_price;
-        product.productQuantity -= quantity;
-        await product.save();
+        existingProduct.total_price += product.productPrice * quantity;
       }
 
-      totalPrice += total_price;
+      totalPrice += product.productPrice * quantity;
     }
 
     cart.total_price = totalPrice;
@@ -98,16 +80,17 @@ export const addToCart = async (req, res) => {
   }
 };
 
-export const Acart = async (req, res) => {
-  console.log(req);
-  // const  id = "6437c07bd944ba122a2804a4"
-  const id = req.params.id;
-  try {
-    const cart = await Cart.find({ user_id: id });
-    if (!cart) {
-      return res.status(404).json({ message: 'no items in the cart' });
-    } else {
-      return res.status(200).json(cart);
+export const Acart = async(req, res) =>{
+  console.log(req.params.id)
+  // const  id = "6437c07bd944ba122a2804a4" 
+  const id = req.params.id
+try{
+    const cart = await Cart.find({user_id: id}).exec();
+    if(!cart){
+      return res.status(404).json({message:"no items in the cart"})
+    
+    }else{
+      return res.status(200).json(cart)
     }
   } catch (error) {
     console.log(error);
@@ -173,9 +156,25 @@ export const removeFromCart = async (req, res) => {
 export const deleteAllCarts = async (req, res) => {
   try {
     await Cart.deleteMany({});
-    res.status(200).json({ success: true, message: 'All carts deleted' });
+    res.status(200).json({ success: true, message: "All carts deleted" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ success: false, message: "Server error" });
   }
-};
+}
+
+export const deleteACart = async (req, res) =>{
+  const id = req.params.id
+  try { const cart = await Cart.find({user_id: id})
+  if(!cart){
+    return res.status(404).json("user dosent have a cart")
+  }
+  await Cart.deleteOne({user_id:id})
+  return res.status(201).json(`cart ${id} is deleted`)
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
