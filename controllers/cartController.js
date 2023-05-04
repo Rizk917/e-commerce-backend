@@ -50,30 +50,16 @@ export const addToCart = async (req, res) => {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
 
-      if (product.productQuantity < quantity) {
-        return res.status(400).json({ success: false, message: "Not enough quantity available" });
-      }
-
-      const price = product.productPrice;
-      const total_price = price * quantity;
-
+      // Don't affect the quantity of the item in the stock
       const existingProduct = cart.products.find((item) => item.product.toString() === productId);
       if (!existingProduct) {
-        product.productQuantity -= quantity;
-        await product.save();
-        cart.products.push({ product: productId, productName, quantity, price, total_price });
+        cart.products.push({ product: productId, productName, quantity, price: product.productPrice, total_price: product.productPrice * quantity });
       } else {
-        const availableQuantity = product.productQuantity + existingProduct.quantity;
-        if (quantity > availableQuantity) {
-          return res.status(400).json({ success: false, message: "Not enough quantity available" });
-        }
         existingProduct.quantity += quantity;
-        existingProduct.total_price += total_price;
-        product.productQuantity -= quantity;
-        await product.save();
+        existingProduct.total_price += product.productPrice * quantity;
       }
 
-      totalPrice += total_price;
+      totalPrice += product.productPrice * quantity;
     }
 
     cart.total_price = totalPrice;
@@ -91,7 +77,7 @@ export const Acart = async(req, res) =>{
   // const  id = "6437c07bd944ba122a2804a4" 
   const id = req.params.id
 try{
-    const cart = await Cart.find({user_id: id});
+    const cart = await Cart.find({user_id: id}).exec();
     if(!cart){
       return res.status(404).json({message:"no items in the cart"})
     
@@ -166,5 +152,20 @@ export const deleteAllCarts = async (req, res) => {
     console.log(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
-};
+}
+
+export const deleteACart = async (req, res) =>{
+  const id = req.params.id
+  try { const cart = await Cart.find({user_id: id})
+  if(!cart){
+    return res.status(404).json("user dosent have a cart")
+  }
+  await Cart.deleteOne({user_id:id})
+  return res.status(201).json(`cart ${id} is deleted`)
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
 
