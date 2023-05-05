@@ -1,25 +1,20 @@
-import Cart from "../models/cartModel.js";
-import Product from "../models/products.model.js";
-import User from "../models/user.model.js"
+import Cart from '../models/cartModel.js';
+import Product from '../models/products.model.js';
+import User from '../models/user.model.js';
 
-
-export const AllCarts = async(req, res) =>{
-  try{
+export const AllCarts = async (req, res) => {
+  try {
     const carts = await Cart.find({}).exec();
-    if(!carts){
-      return res.status(404).json({message: "no carts"})
+    if (!carts) {
+      return res.status(404).json({ message: 'no carts' });
+    } else {
+      return res.status(200).json(carts);
     }
-    else{
-      return res.status(200).json(carts)
-    }
-    
-  }catch (error) {
+  } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
-}}
-
-
-
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
 
 export const addToCart = async (req, res) => {
   console.log(req.body);
@@ -27,7 +22,9 @@ export const addToCart = async (req, res) => {
     const { productId, productName, quantity } = req.body;
     const userId = req.body.userId;
 
-    const cartProducts = Array.isArray(req.body.products) ? req.body.products : [{ productId, productName, quantity }];
+    const cartProducts = Array.isArray(req.body.products)
+      ? req.body.products
+      : [{ productId, productName, quantity }];
 
     let cart = await Cart.findOne({ user_id: userId });
 
@@ -47,12 +44,23 @@ export const addToCart = async (req, res) => {
       const product = await Product.findById(productId);
 
       if (!product) {
-        return res.status(404).json({ success: false, message: "Product not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: 'Product not found' });
       }
 
       // Don't affect the quantity of the item in the stock
       const existingProduct = cart.products.find((item) => item.product.toString() === productId);
       if (!existingProduct) {
+        product.productQuantity -= quantity;
+        await product.save();
+        cart.products.push({
+          product: productId,
+          productName,
+          quantity,
+          price,
+          total_price,
+        });
         cart.products.push({ product: productId, productName, quantity, price: product.productPrice, total_price: product.productPrice * quantity });
       } else {
         existingProduct.quantity += quantity;
@@ -68,7 +76,7 @@ export const addToCart = async (req, res) => {
     res.status(201).json({ success: true, cart });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -84,19 +92,12 @@ try{
     }else{
       return res.status(200).json(cart)
     }
-  }catch (error) {
+  } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
-}
-}
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
 
-  
-
-  
-
-  
-
-  
 export const removeFromCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
@@ -105,7 +106,9 @@ export const removeFromCart = async (req, res) => {
     let cart = await Cart.findOne({ user_id: userId });
 
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Cart not found' });
     }
 
     const index = cart.products.findIndex(
@@ -118,7 +121,13 @@ export const removeFromCart = async (req, res) => {
       const total_price = price * quantity;
 
       if (quantity > cart.products[index].quantity) {
-        return res.status(400).json({ success: false, message: "Cannot remove more products than the quantity in the cart" });
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message:
+              'Cannot remove more products than the quantity in the cart',
+          });
       }
 
       cart.products[index].quantity -= quantity;
@@ -141,7 +150,7 @@ export const removeFromCart = async (req, res) => {
     res.status(200).json({ success: true, cart });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 export const deleteAllCarts = async (req, res) => {

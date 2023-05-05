@@ -4,6 +4,7 @@ import Product from "../models/products.model.js";
 
 
 export const creatAnOrder = async (req, res) => {
+  console.log("order")
   try {
     console.log(req.body)
 
@@ -50,7 +51,7 @@ export const getAllOrders = async (req,res)=>{
     try{
     const order = await Order.find({}).exec();
     if(!order){
-        return res.status(404).json("no avaialble order")
+        return res.status(404).json("no available order")
     }
     else{
         return res.status(200).json(order)
@@ -66,7 +67,7 @@ export const getAnOrder = async (req,res) =>{
     const id = req.params.id
 try {const order = await Order.findById(id)
 if(!order){
-  return  res.status(404).json('no avaialble order')
+  return  res.status(404).json('no available order')
 
 }
 else{
@@ -83,7 +84,7 @@ else{
     const id =req.params.id
     try {const order = await Order.findById(id)
         if(!order){
-        return  res.status(404).json('no avaialble order')
+        return  res.status(404).json('no available order')
         
         }
         else{
