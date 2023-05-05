@@ -28,9 +28,9 @@ export const creatAnOrder = async (req, res) => {
       totalBill: totalBill,
       
     });
-    console.log(order)
     await order.save();
     Cart.deleteOne({ user_id: userId }).exec();
+
 
     // for (const product of order.products) {
     //   const productToUpdate = await Product.findById(product.productId);
@@ -40,8 +40,20 @@ export const creatAnOrder = async (req, res) => {
     //   }
     
     // }
+    for (let j=0; j< cart[0].products.length; j++){
+      let product = cart[0].products[j].productId;
+      console.log("123 ",cart[0].products[j])
+      console.log("zeinab ",product)
+      console.log(`this is product: ${typeof(product)}`)
+     const finder=  await Product.findById(product).exec()
+     console.log(`this is finder: ${finder}`)
+      finder.productQuantity =  finder.productQuantity - cart[0].products[j].quantity
+      console.log(`this is finder.productQuantity: ${finder.productQuantity}`)
+      await Product.findByIdAndUpdate({product}, {productQuantity:finder.productQuantity  })
+    }
 
     return res.status(200).json(order);
+
   } catch (error) {
     console.error(error);
     return res.status(500).json("Server error");
