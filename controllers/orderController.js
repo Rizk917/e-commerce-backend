@@ -39,17 +39,17 @@ export const creatAnOrder = async (req, res) => {
     //   }
     
     // }
-    for (let j=0; j< cart[0].products.length; j++){
-      let product = cart[0].products[j].productId;
-      console.log("123 ",cart[0].products[j])
-      console.log("zeinab ",product)
-      console.log(`this is product: ${typeof(product)}`)
-     const finder=  await Product.findById(product).exec()
-     console.log(`this is finder: ${finder}`)
-      finder.productQuantity =  finder.productQuantity - cart[0].products[j].quantity
-      console.log(`this is finder.productQuantity: ${finder.productQuantity}`)
-      await Product.findByIdAndUpdate({product}, {productQuantity:finder.productQuantity  })
-    }
+    // for (let j=0; j< cart[0].products.length; j++){
+    //   let product = cart[0].products[j].productId;
+    //   console.log("123 ",cart[0].products[j])
+    //   console.log("zeinab ",product)
+    //   console.log(`this is product: ${typeof(product)}`)
+    //  const finder=  await Product.findById(product).exec()
+    //  console.log(`this is finder: ${finder}`)
+    //   finder.productQuantity =  finder.productQuantity - cart[0].products[j].quantity
+    //   console.log(`this is finder.productQuantity: ${finder.productQuantity}`)
+    //   await Product.findByIdAndUpdate({product}, {productQuantity:finder.productQuantity  })
+    // }
 
     return res.status(200).json(order);
 
@@ -150,20 +150,25 @@ try{
 
         
 
-      export const orderStatus = async (req, res) => {
-        console.log(req.params.id)
-        console.log(req.body.status)
-        const value = req.body.status
-        const id= req.params.id;
+         export const orderStatus = async (req, res) => {
+          const { id } = req.params;
+          const { status } = req.body;
         
-          try {const order = await Order.findByIdAndUpdate(id, { status: value });
-          return res.status(200).json(order)
-            
+          if (!id || !status) {
+            return res.status(400).json({ success: false, message: "Invalid input" });
+          }
+        
+          try {
+            const order = await Order.findByIdAndUpdate(id, { status });
+            if (!order) {
+              return res.status(404).json({ success: false, message: "Order not found" });
+            }
+            return res.status(200).json(order);
           } catch (error) {
             console.log(error);
             res.status(500).json({ success: false, message: "Server error" });
           }
-      }
+        };
 
         export const userOrder = async (req, res) =>{
           const id= req.params.id
