@@ -1,4 +1,5 @@
 import Product from "../models/products.model.js";
+import Popular from "../models/popularProduct.js"
 import { v2 as cloudinary } from "cloudinary";
 
 // Configuration
@@ -59,8 +60,8 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-    console.log(req.body)
-    console.log(req.params.id)
+    // console.log(req.body)
+    // console.log(req.params.id)
     const productId = req.params.id;
     const { productName,productDescription,productPrice,productQuantity,categoryId } = req.body;
     try {
@@ -99,6 +100,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const productId = req.params.id;
   const deletedProduct = await Product.findByIdAndDelete(productId);
+  await Popular.findOneAndDelete({productId : productId});
   res.json({
     message: "Program deleted successfully",
     status: 200,

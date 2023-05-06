@@ -40,6 +40,7 @@ const deletePopularProduct = async (req, res) => {
 const getAllPopularProducts = async (req, res) => {
   try {
     const popularProducts = await PopularProduct.find().populate("productId");
+
     res.status(200).json(popularProducts);
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });

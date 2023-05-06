@@ -65,14 +65,26 @@ const loginUser = asyncHandler (async(req, res) => {
     const loginUser = await user.findOne({email})
 
     if(loginUser && (await bcrypt.compare(password, loginUser.password)) ) {
-        res.json({
-            _id:loginUser.id,
-            name: loginUser.name,
-            email: loginUser.email,
-            role:loginUser.role,
-            token: generateToken(user._id)
 
-        })
+      const token = jwt.sign(
+        { user_id: loginUser._id, email, role: loginUser.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "2h",
+        }
+      );
+      // save user token
+      user.token = token;
+  
+      const user_object  = {
+        id: loginUser._id,
+        name: loginUser.name,
+        email,
+        role: loginUser.role,
+        token,
+      }
+  
+        res.json( user_object)
     }else{
         res.status(400)
         throw new Error('Invalid Email Data')
@@ -82,12 +94,14 @@ const loginUser = asyncHandler (async(req, res) => {
 
 
 const getMe = asyncHandler(async (req, res) => {
-    const currentUser = await user.findById(req.user.id);
+  // console.log("decoded ",req);
+    // const currentUser = await user.findById(req.user._id);
+
   
     res.json({
       message: "User data retrieved successfully",
       status: 200,
-      data: currentUser,
+      data: 'currentUser',
     });
   });
   

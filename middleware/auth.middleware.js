@@ -14,7 +14,10 @@ if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
          //Add user from payload
-        req.user = await user.findById(decoded.id).select('-password')
+        // req.user = await user.findById(decoded.id).select('-password')
+        req.user=decoded
+        // console.log(decoded)
+        
 
         next()
     }catch (error){

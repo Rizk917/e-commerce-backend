@@ -31,5 +31,5 @@ cloudinary.config({
 
 
 // The output url
-console.log(url);
+// console.log(url);
 // https://res.cloudinary.com/<cloud_name>/image/upload/h_150,w_100/olympic_flag

@@ -41,8 +41,8 @@ const createImage = async (req, res) => {
 };
 
 const updateImage = async (req, res) => {
-    console.log(req.body)
-    console.log(req.params.id)
+    // console.log(req.body)
+    // console.log(req.params.id)
     const imageId = req.params.id;
     const { imageCarouselItem, altText } = req.body;
     try {

@@ -6,12 +6,15 @@ const router = express.Router();
 
 
 router.route('/').post(userController.registerUser);
-router.route('/:id').get(userController.getUserById);
 router.route('/login').post(userController.loginUser);
-router.route('/me').get(protect,userController.getMe);
 router.route('/').get(userController.getUsers);
+
+router.route('/me').get(protect,userController.getMe);
+router.route('/:id').get(userController.getUserById);
+
 router.route('/edit/:id').put(userController.editUser);
 router.route('/:id').delete(userController.deleteUser);
+
 
 
 export default router;

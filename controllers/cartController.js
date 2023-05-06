@@ -17,7 +17,7 @@ export const AllCarts = async (req, res) => {
 };
 
 export const addToCart = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const { productId, productName, quantity } = req.body;
     const userId = req.body.userId;
@@ -81,7 +81,7 @@ export const addToCart = async (req, res) => {
 };
 
 export const Acart = async(req, res) =>{
-  console.log(req.params.id)
+  // console.log(req.params.id)
   // const  id = "6437c07bd944ba122a2804a4" 
   const id = req.params.id
 try{

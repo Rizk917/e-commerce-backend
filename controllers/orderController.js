@@ -4,9 +4,9 @@ import Product from "../models/products.model.js";
 
 
 export const creatAnOrder = async (req, res) => {
-  console.log("order")
+  // console.log("order")
   try {
-    console.log(req.body)
+    // console.log(req.body)
 
     const userId = req.body.userId;
 
@@ -42,13 +42,13 @@ export const creatAnOrder = async (req, res) => {
     // }
     for (let j=0; j< cart[0].products.length; j++){
       let product = cart[0].products[j].productId;
-      console.log("123 ",cart[0].products[j])
-      console.log("zeinab ",product)
-      console.log(`this is product: ${typeof(product)}`)
+      // console.log("123 ",cart[0].products[j])
+      // console.log("zeinab ",product)
+      // console.log(`this is product: ${typeof(product)}`)
      const finder=  await Product.findById(product).exec()
-     console.log(`this is finder: ${finder}`)
+    //  console.log(`this is finder: ${finder}`)
       finder.productQuantity =  finder.productQuantity - cart[0].products[j].quantity
-      console.log(`this is finder.productQuantity: ${finder.productQuantity}`)
+      // console.log(`this is finder.productQuantity: ${finder.productQuantity}`)
       await Product.findByIdAndUpdate({product}, {productQuantity:finder.productQuantity  })
     }
 
@@ -152,8 +152,8 @@ try{
         
 
       export const orderStatus = async (req, res) => {
-        console.log(req.params.id)
-        console.log(req.body.status)
+        // console.log(req.params.id)
+        // console.log(req.body.status)
         const value = req.body.status
         const id= req.params.id;
         
