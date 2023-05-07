@@ -52,6 +52,10 @@ const orderSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  name:{
+    type: String
+
+  },
 totalBill:{
   type: Number
 }},
