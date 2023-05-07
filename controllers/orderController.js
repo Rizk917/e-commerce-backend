@@ -57,9 +57,12 @@ export const creatAnOrder = async (req, res) => {
 };
 export const getAllOrders = async (req, res) => {
   try {
-    const order = await Order.find({}).exec();
+    const order = await Order.find({})
+      .populate('userId' , 'name email') // populate the 'customer' field with 'name' and 'email'
+      .exec();
+      
     if (!order) {
-      return res.status(404).json("no avaialble order");
+      return res.status(404).json("no available order");
     } else {
       return res.status(200).json(order);
     }
@@ -68,6 +71,7 @@ export const getAllOrders = async (req, res) => {
     return res.status(500).json("Server error");
   }
 };
+
 
 export const getAnOrder = async (req, res) => {
   const id = req.params.id;
