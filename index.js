@@ -11,8 +11,8 @@ import cartRoutes from "./routes/cartRoutes.js"
 import popularRoutes from "./routes/popularProductRoute.js"
 import orderRoutes from './routes/orderRoutes.js'
 import imageCarouselRoute from "./routes/imageCarousel.route.js";
+import contactusRoutes from './routes/contactUS.js'
 import cors from "cors";
-
 const corsOptions = {
   origin: "*",
   credentials: true,
@@ -49,6 +49,7 @@ app.use("/imageCarousel", imageCarouselRoute);
 app.use("/about",aboutRoute)
 app.use("/popular",popularRoutes)
 
+app.use("/contactus", contactusRoutes);
 
 
 app.use(errorHandler);
